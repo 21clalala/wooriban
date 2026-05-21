@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자유주제 진로탐구 보고서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f8f8f6; --bg3: #f1f0ec;
+    --text: #111111; --text2: #555555; --text3: #999999;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --green: #1D9E75; --green-bg: #E1F5EE; --green-text: #085041;
+    --amber-bg: #FAEEDA; --amber-text: #633806;
+    --red-bg: #FCEBEB; --red-text: #A32D2D;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --bg2: #232323; --bg3: #2a2a2a;
+      --text: #f0f0f0; --text2: #aaaaaa; --text3: #666666;
+      --border: rgba(255,255,255,0.10); --border2: rgba(255,255,255,0.20);
+      --green-bg: #04342C; --green-text: #9FE1CB;
+      --amber-bg: #412402; --amber-text: #FAC775;
+      --red-bg: #501313; --red-text: #F09595;
+    }
+  }
+  body { font-family: 'Noto Sans KR', sans-serif; font-size: 15px; line-height: 1.7; color: var(--text); background: var(--bg2); padding-bottom: 60px; }
+  .top-bar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 14px 16px 12px; position: sticky; top: 0; z-index: 100; }
+  .top-bar-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+  .badge { font-size: 10px; font-weight: 700; background: var(--text); color: var(--bg); padding: 2px 8px; border-radius: 4px; letter-spacing: 0.04em; flex-shrink: 0; }
+  .top-title { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+  .save-indicator { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .save-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); transition: background 0.3s; }
+  .save-dot.saved { background: var(--green); }
+  .save-dot.saving { background: #BA7517; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 16px 16px; }
+  .progress-wrap { margin-bottom: 14px; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+  .progress-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--text); border-radius: 99px; transition: width 0.4s ease; width: 0%; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .info-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
+  .info-label { font-size: 11px; color: var(--text3); font-weight: 500; margin-bottom: 4px; }
+  .info-input { width: 100%; border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 500; color: var(--text); outline: none; }
+  .info-input::placeholder { color: var(--text3); font-weight: 400; }
+  .section { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+  .sec-head { display: flex; align-items: center; gap: 10px; background: var(--bg3); border-bottom: 0.5px solid var(--border); padding: 10px 14px; }
+  .sec-num { width: 22px; height: 22px; border-radius: 50%; background: var(--text); color: var(--bg); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
+  .sec-hint { font-size: 11px; color: var(--text3); }
+  .sec-body { padding: 12px 14px; }
+  .field { margin-bottom: 12px; }
+  .field:last-child { margin-bottom: 0; }
+  .field-label { font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 3px; }
+  .field-hint { font-size: 11px; color: var(--text3); margin-bottom: 5px; line-height: 1.5; }
+  textarea { width: 100%; border: 0.5px solid var(--border2); border-radius: var(--radius-sm); padding: 9px 11px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); resize: vertical; line-height: 1.7; outline: none; transition: border-color 0.15s; -webkit-appearance: none; }
+  textarea:focus { border-color: var(--text); }
+  textarea::placeholder { color: var(--text3); font-size: 13px; }
+  .divider-lbl { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; padding-bottom: 6px; margin: 12px 0 8px; border-bottom: 0.5px solid var(--border); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } .info-grid { grid-template-columns: 1fr 1fr; } }
+
+  @media (min-width: 600px) {
+    .wrap { padding: 20px 28px; }
+    .top-bar { padding: 16px 28px 14px; }
+    body { font-size: 15.5px; }
+    textarea { font-size: 14.5px; }
+  }
+
+  @media (min-width: 768px) {
+    .wrap { padding: 24px 40px; }
+    .top-bar-inner { padding: 0 8px; }
+    .info-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .sec-body { padding: 16px 20px; }
+    .sec-head { padding: 12px 20px; }
+    body { font-size: 16px; }
+    textarea { font-size: 15px; }
+    .field-label { font-size: 12px; }
+    .field-hint { font-size: 12px; }
+  }
+
+  @media (min-width: 1024px) {
+    .wrap { padding: 28px 48px; }
+    body { font-size: 16px; }
+  }
+  .char-count { font-size: 11px; color: var(--text3); text-align: right; margin-top: 3px; }
+  .notice { border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; margin-bottom: 14px; line-height: 1.6; }
+  .notice.amber { background: var(--amber-bg); color: var(--amber-text); }
+  .notice.green { background: var(--green-bg); color: var(--green-text); }
+  .notice.red { background: var(--red-bg); color: var(--red-text); }
+  .notice strong { font-weight: 700; }
+  .btn-area { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .btn-main { flex: 1; min-width: 140px; padding: 13px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-sub { padding: 13px 16px; background: transparent; color: var(--text); border: 0.5px solid var(--border2); border-radius: var(--radius); font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; white-space: nowrap; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: var(--bg); font-size: 13px; padding: 10px 20px; border-radius: 99px; opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; pointer-events: none; white-space: nowrap; z-index: 200; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .submit-modal-bg { display: none; min-height: 300px; background: rgba(0,0,0,0.45); align-items: center; justify-content: center; padding: 20px; }
+  .submit-modal-bg.open { display: flex; }
+  .submit-modal { background: var(--bg); border-radius: var(--radius); padding: 24px 20px; max-width: 360px; width: 100%; }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .modal-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
+  .modal-btns { display: flex; gap: 8px; }
+  .modal-confirm { flex: 1; padding: 12px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
+  .modal-cancel { padding: 12px 16px; background: transparent; color: var(--text); border: 0.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; cursor: pointer; }
+  @media print {
+    .top-bar, .progress-wrap, .notice, .btn-area, .submit-modal-bg, .toast { display: none !important; }
+    body { background: white; }
+    .wrap { padding: 0; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <span class="badge">진로탐구</span>
+    <span class="top-title">탐구보고서</span>
+    <div class="save-indicator">
+      <div class="save-dot" id="dot"></div>
+      <span id="save-txt">저장 대기</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="notice amber" id="notice-save">
+    <strong>임시저장 안내</strong><br>
+    입력 내용은 이 기기·브라우저에 <strong>자동 저장</strong>됩니다. 나갔다가 같은 브라우저로 돌아오면 이어서 작성할 수 있어요. 단, <strong>시크릿 모드</strong>나 <strong>브라우저 데이터 삭제</strong> 시 사라질 수 있습니다.
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span>작성 진행률</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-bar"></div>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-label">이름</div>
+      <input class="info-input" type="text" id="f-name" placeholder="홍길동" autocomplete="off">
+    </div>
+    <div class="info-card">
+      <div class="info-label">학번</div>
+      <input class="info-input" type="text" id="f-id" placeholder="3-2-15" autocomplete="off">
+    </div>
+    <div class="info-card">
+      <div class="info-label">희망 진로</div>
+      <input class="info-input" type="text" id="f-career" placeholder="예) 변호사" autocomplete="off">
+    </div>
+    <div class="info-card">
+      <div class="info-label">작성일</div>
+      <input class="info-input" type="date" id="f-date">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">1</div><span class="sec-title">탐구 주제 및 동기</span><span class="sec-hint">왜 이 주제?</span></div>
+    <div class="sec-body">
+      <div class="field">
+        <div class="field-label">탐구 주제</div>
+        <div class="field-hint">진로와 연결된 궁금증을 한 문장으로</div>
+        <textarea id="s1-topic" rows="2" placeholder="예) 인공지능 판사는 실제로 공정할 수 있을까?"></textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">탐구 동기</div>
+        <div class="field-hint">이 주제에 관심 갖게 된 계기, 진로와의 연결 (3~5문장)</div>
+        <textarea id="s1-motive" rows="5" placeholder="예) 저는 법조인을 꿈꾸고 있습니다. 최근 AI 기술이 법원에도 도입된다는 기사를 읽고..."></textarea>
+        <div class="char-count" id="cnt-motive">0자</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">2</div><span class="sec-title">탐구 목표 및 방법</span><span class="sec-hint">무엇을, 어떻게</span></div>
+    <div class="sec-body">
+      <div class="field">
+        <div class="field-label">탐구 목표</div>
+        <div class="field-hint">알고 싶은 것 2~3가지</div>
+        <textarea id="s2-goal" rows="3" placeholder="① AI 판사 시스템의 원리와 현황&#10;② AI 판사의 공정성 논란&#10;③ 법조인 역할의 변화 전망"></textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">탐구 방법</div>
+        <div class="field-hint">어떻게 정보를 수집했나요? (문헌 조사, 인터뷰, 설문 등)</div>
+        <textarea id="s2-method" rows="3" placeholder="국내외 뉴스 기사와 논문을 검색하고, 관련 유튜브 다큐멘터리를 시청했습니다..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">3</div><span class="sec-title">탐구 내용</span><span class="sec-hint">핵심 파트</span></div>
+    <div class="sec-body">
+      <div class="divider-lbl">배경 지식</div>
+      <div class="field">
+        <div class="field-label">기본 개념 및 현황</div>
+        <div class="field-hint">이 분야가 무엇인지, 지금 어떤 상황인지 요약</div>
+        <textarea id="s3-bg" rows="5" placeholder="AI 판사란 머신러닝 알고리즘을 이용해 판결 결과를 예측하거나 보조하는 시스템입니다..."></textarea>
+      </div>
+      <div class="divider-lbl">심화 탐구</div>
+      <div class="field">
+        <div class="field-label">탐구한 핵심 내용</div>
+        <div class="field-hint">발견한 사실, 논점, 쟁점 구체적으로 + 자료 출처 포함 (5~8문장 이상)</div>
+        <textarea id="s3-main" rows="8" placeholder="첫째, AI 판사 시스템은 주로 소액 재판이나 단순 행정 분쟁에 활용되고 있습니다..."></textarea>
+        <div class="char-count" id="cnt-main">0자</div>
+      </div>
+      <div class="divider-lbl">나의 분석</div>
+      <div class="field">
+        <div class="field-label">내 생각과 비판적 분석</div>
+        <div class="field-hint">단순 요약을 넘어, 나만의 관점으로 분석해주세요</div>
+        <textarea id="s3-analysis" rows="5" placeholder="저는 AI 판사가 공정성을 완전히 보장할 수 없다고 생각합니다. 왜냐하면..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">4</div><span class="sec-title">결론 및 느낀 점</span><span class="sec-hint">탐구를 마치며</span></div>
+    <div class="sec-body">
+      <div class="field">
+        <div class="field-label">탐구 결론</div>
+        <div class="field-hint">알게 된 것, 답을 찾은 것을 요약</div>
+        <textarea id="s4-conclusion" rows="4" placeholder="이번 탐구를 통해 AI 판사는 단순 사건에서는 효율성을 높일 수 있지만..."></textarea>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <div class="field-label">탐구 소감</div>
+          <div class="field-hint">느낀 점, 어려웠던 점</div>
+          <textarea id="s4-feeling" rows="4" placeholder="처음에는 AI가 판사를 대체할 수 있다고 생각했는데..."></textarea>
+        </div>
+        <div class="field">
+          <div class="field-label">진로 연계 소감</div>
+          <div class="field-hint">나의 꿈과 어떻게 연결되나요?</div>
+          <textarea id="s4-career-feel" rows="4" placeholder="이 탐구 후 법조인이 되려는 꿈이 더욱 확고해졌습니다..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">5</div><span class="sec-title">참고 자료</span><span class="sec-hint">출처 3개 이상 필수</span></div>
+    <div class="sec-body">
+      <div class="field">
+        <div class="field-hint">책, 기사, 영상, 웹사이트 — 번호를 붙여 작성</div>
+        <textarea id="s5-ref" rows="4" placeholder="① 조선일보, 「AI 판사, 에스토니아에서 실제 도입」, 2023.09.15.&#10;② 한국법학원, 『인공지능과 법』, 2022.&#10;③ TED, 「Can AI be fair?」, https://..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-area">
+    <button class="btn-main" id="btn-submit" onclick="openModal()">&#128228; 최종 제출</button>
+    <button class="btn-sub" onclick="window.print()">&#128438; PDF 저장</button>
+    <button class="btn-sub" onclick="clearAll()">초기화</button>
+  </div>
+
+  <!-- 제출 확인 모달 -->
+  <div class="submit-modal-bg" id="modal">
+    <div class="submit-modal">
+      <div class="modal-title">최종 제출할까요?</div>
+      <div class="modal-desc">제출하면 선생님 스프레드시트에 내용이 전송됩니다. 제출 후에도 이 페이지에서 계속 수정하거나 PDF로 저장할 수 있어요.</div>
+      <div class="modal-btns">
+        <button class="modal-confirm" id="btn-confirm" onclick="submitToSheet()">제출하기</button>
+        <button class="modal-cancel" onclick="closeModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ★ 여기에 Apps Script 웹앱 URL을 붙여넣으세요
+  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbziAXhs4bNHvErC_ZhhJbVggF3HEl75HyePRaR40yQd1TiOXLXjIss2BST1EzxUvvBKXQ/exec';
+
+  var STORE_KEY = 'career-report-v1';
+  var fields = ['f-name','f-id','f-career','f-date','s1-topic','s1-motive','s2-goal','s2-method','s3-bg','s3-main','s3-analysis','s4-conclusion','s4-feeling','s4-career-feel','s5-ref'];
+  var saveTimer = null;
+
+  function load() {
+    try {
+      var data = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+      fields.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.value = data[id];
+      });
+    } catch(e) {}
+    updateProgress(); updateCounters();
+  }
+
+  function save() {
+    var dot = document.getElementById('dot'), txt = document.getElementById('save-txt');
+    dot.className = 'save-dot saving'; txt.textContent = '저장 중...';
+    var data = {};
+    fields.forEach(function(id) { var el = document.getElementById(id); if (el) data[id] = el.value; });
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      setTimeout(function() { dot.className = 'save-dot saved'; txt.textContent = '자동 저장됨'; }, 400);
+    } catch(e) { dot.className = 'save-dot'; txt.textContent = '저장 실패'; }
+  }
+
+  function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(save, 1200); }
+
+  function updateProgress() {
+    var taIds = ['s1-topic','s1-motive','s2-goal','s2-method','s3-bg','s3-main','s3-analysis','s4-conclusion','s4-feeling','s4-career-feel','s5-ref'];
+    var filled = taIds.filter(function(id) { var el = document.getElementById(id); return el && el.value.trim().length > 10; }).length;
+    var pct = Math.round(filled / taIds.length * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+  }
+
+  function updateCounters() {
+    [['s1-motive','cnt-motive'],['s3-main','cnt-main']].forEach(function(pair) {
+      var el = document.getElementById(pair[0]), cnt = document.getElementById(pair[1]);
+      if (el && cnt) cnt.textContent = el.value.length + '자';
+    });
+  }
+
+  function onInput() { updateProgress(); updateCounters(); scheduleSave(); }
+
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', onInput);
+  });
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2500);
+  }
+
+  function clearAll() {
+    if (!confirm('작성한 내용을 모두 지울까요?')) return;
+    fields.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+    try { localStorage.removeItem(STORE_KEY); } catch(e) {}
+    updateProgress(); updateCounters();
+    document.getElementById('dot').className = 'save-dot';
+    document.getElementById('save-txt').textContent = '저장 대기';
+    showToast('초기화 완료');
+  }
+
+  function openModal() { document.getElementById('modal').classList.add('open'); }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+  function submitToSheet() {
+    if (SHEET_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+      closeModal();
+      showToast('⚠ 선생님: SHEET_URL을 먼저 설정해 주세요');
+      return;
+    }
+    var btn = document.getElementById('btn-confirm');
+    btn.textContent = '전송 중...'; btn.disabled = true;
+
+    var payload = {
+      timestamp: new Date().toLocaleString('ko-KR'),
+      name:        g('f-name'),
+      studentId:   g('f-id'),
+      career:      g('f-career'),
+      date:        g('f-date'),
+      topic:       g('s1-topic'),
+      motive:      g('s1-motive'),
+      goal:        g('s2-goal'),
+      method:      g('s2-method'),
+      background:  g('s3-bg'),
+      mainContent: g('s3-main'),
+      analysis:    g('s3-analysis'),
+      conclusion:  g('s4-conclusion'),
+      feeling:     g('s4-feeling'),
+      careerFeel:  g('s4-career-feel'),
+      references:  g('s5-ref')
+    };
+
+    var iframe = document.getElementById('hidden-iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.name = 'hidden-iframe';
+      iframe.id = 'hidden-iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = SHEET_URL;
+    form.target = 'hidden-iframe';
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'payload';
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
+    document.body.appendChild(form);
+    iframe.onload = function() {
+      closeModal();
+      btn.textContent = '제출하기'; btn.disabled = false;
+      showToast('제출 완료! 선생님 스프레드시트에 전송됐어요');
+      document.getElementById('notice-save').innerHTML = '<strong>제출 완료</strong><br>선생님 스프레드시트에 전송되었습니다. PDF로도 저장해두면 좋아요!';
+      document.getElementById('notice-save').className = 'notice green';
+      document.body.removeChild(form);
+    };
+    form.submit();
+  }
+
+  function g(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  window.addEventListener('beforeunload', function() { save(); });
+  load();
+</script>
+</body>
+</html>
