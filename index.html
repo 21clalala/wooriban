@@ -377,11 +377,13 @@
       references:  g('s5-ref')
     };
 
+    var params = new URLSearchParams();
+    params.append('data', JSON.stringify(payload));
+
     fetch(SHEET_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
+      body: params
     }).then(function() {
       closeModal();
       btn.textContent = '제출하기'; btn.disabled = false;
