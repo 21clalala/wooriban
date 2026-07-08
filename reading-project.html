@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>진로 연계 독서 프로젝트 활동지</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<style>
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap');
+
+:root{
+  --ink:#1E2B3A;
+  --ink-soft:#4B5A66;
+  --cloth:#2F4A3E;
+  --cloth-dark:#22362D;
+  --brass:#AD7C2C;
+  --brass-light:#D9B679;
+  --paper:#EAE6DA;
+  --paper-card:#F7F4EC;
+  --line:#D8D2C1;
+  --danger:#9B3B34;
+  --radius:10px;
+  --shadow: 0 2px 10px rgba(30,43,58,0.08);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Pretendard', -apple-system, 'Malgun Gothic', sans-serif;
+  line-height:1.6;
+  padding-bottom:80px;
+}
+h1,h2,h3{ font-family:'Noto Serif KR', serif; color:var(--ink); margin:0; }
+
+.shell{
+  display:grid;
+  grid-template-columns:230px 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  gap:0;
+}
+@media (max-width:860px){ .shell{ grid-template-columns:1fr; } }
+
+.hero{
+  grid-column:1 / -1;
+  background:var(--cloth);
+  color:#F1EEE3;
+  padding:38px 32px 30px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";
+  position:absolute; right:-40px; top:-40px;
+  width:220px; height:220px; border-radius:50%;
+  background:radial-gradient(circle, rgba(217,182,121,0.18), transparent 70%);
+}
+.hero .eyebrow{
+  font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--brass-light); font-weight:600; margin-bottom:10px;
+}
+.hero h1{ font-size:27px; color:#fff; margin-bottom:6px;}
+.hero p.sub{ color:#D9D4C4; font-size:14.5px; max-width:660px; margin-top:8px;}
+.hero .note{
+  margin-top:14px; font-size:12.5px; color:#EFE7D2; background:rgba(0,0,0,0.15);
+  border-left:3px solid var(--brass); padding:8px 12px; max-width:660px; border-radius:0 6px 6px 0;
+}
+.hero .schedule{ margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; }
+.hero .schedule span{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(217,182,121,0.35);
+  color:#EFE7D2; font-size:12.5px; padding:5px 11px; border-radius:100px;
+}
+
+.ribbon{
+  background:var(--cloth-dark);
+  padding:26px 0;
+  position:sticky; top:0; align-self:start; height:100vh;
+  overflow-y:auto;
+}
+@media (max-width:860px){
+  .ribbon{ position:sticky; top:0; height:auto; z-index:20; display:flex; overflow-x:auto; padding:10px 12px; gap:0; }
+}
+.ribbon-item{
+  display:flex; align-items:center; gap:10px;
+  padding:13px 22px; color:#B7C2B9; font-size:13.5px; cursor:pointer;
+  border-left:3px solid transparent; white-space:nowrap; transition:background .15s;
+}
+.ribbon-item:hover{ background:rgba(255,255,255,0.04); }
+.ribbon-item .num{
+  width:20px; height:20px; border-radius:50%; border:1px solid #6C7D71;
+  display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0;
+}
+.ribbon-item.done .num{ background:var(--brass); border-color:var(--brass); color:#22362D; font-weight:700;}
+.ribbon-item.active{ color:#fff; background:rgba(217,182,121,0.12); border-left-color:var(--brass); }
+@media (max-width:860px){
+  .ribbon-item{ padding:8px 14px; border-left:none; border-bottom:3px solid transparent;}
+  .ribbon-item.active{ border-bottom-color:var(--brass); border-left-color:transparent;}
+  .ribbon-item span.label{ display:none; }
+}
+
+.progress-wrap{ padding:16px 22px 0; }
+@media (max-width:860px){ .progress-wrap{ display:none; } }
+.progress-track{ height:5px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden;}
+.progress-fill{ height:100%; background:var(--brass); width:0%; transition:width .3s; }
+.progress-label{ color:#9BAA9E; font-size:11.5px; margin-top:6px; }
+
+main{ padding:30px 34px 20px; min-width:0; }
+@media (max-width:600px){ main{ padding:20px 16px; } }
+
+.card{
+  background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:26px 28px; margin-bottom:22px; box-shadow:var(--shadow);
+}
+.card .stage-eyebrow{ font-size:12px; color:var(--brass); letter-spacing:.1em; font-weight:600; text-transform:uppercase; }
+.card h2{ font-size:21px; margin:4px 0 6px; }
+.card .stage-desc{ color:var(--ink-soft); font-size:14px; margin-bottom:20px; }
+
+label{ display:block; font-weight:600; font-size:14px; margin:16px 0 6px; }
+label.req::after{ content:" *"; color:var(--danger); }
+.hint{ font-size:12.5px; color:var(--ink-soft); margin:-3px 0 8px; }
+
+input[type=text], textarea, select{
+  width:100%; font-family:inherit; font-size:14.5px; color:var(--ink);
+  background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px 12px; resize:vertical;
+}
+select{ appearance:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%234B5A66" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>'); background-repeat:no-repeat; background-position:right 12px center; padding-right:34px; }
+input[type=text]:focus, textarea:focus, select:focus{
+  outline:none; border-color:var(--brass); box-shadow:0 0 0 3px rgba(173,124,44,0.15);
+}
+.row{ display:grid; gap:14px; }
+.row.cols-2{ grid-template-columns:1fr 1fr; }
+.row.cols-3{ grid-template-columns:1fr 1fr 1fr; }
+@media (max-width:600px){ .row.cols-2, .row.cols-3{ grid-template-columns:1fr; } }
+
+.chip-group{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+.chip{
+  border:1px solid var(--line); border-radius:100px; padding:7px 14px; font-size:13px;
+  cursor:pointer; background:#fff; color:var(--ink-soft); user-select:none;
+}
+.chip input{ display:none; }
+.chip.checked{ background:var(--cloth); border-color:var(--cloth); color:#fff; }
+
+table.grid-table{ width:100%; border-collapse:collapse; margin-top:8px; }
+table.grid-table th{
+  text-align:left; font-size:12.5px; color:var(--ink-soft); font-weight:600;
+  padding:6px 8px; border-bottom:1px solid var(--line);
+}
+table.grid-table td{ padding:6px 8px; vertical-align:top; border-bottom:1px solid var(--line); }
+table.grid-table td.fixed-label{ width:120px; font-size:13px; font-weight:600; color:var(--ink); padding-top:12px; }
+table.grid-table textarea{ min-height:44px; }
+.add-row-btn{
+  margin-top:10px; background:none; border:1px dashed var(--ink-soft); color:var(--ink-soft);
+  border-radius:8px; padding:7px 14px; font-size:13px; cursor:pointer;
+}
+.add-row-btn:hover{ border-color:var(--brass); color:var(--brass); }
+.del-row{ background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px; line-height:1;}
+
+.likert{ display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:8px;}
+.likert-item{ display:flex; flex-direction:column; align-items:center; gap:5px; font-size:11px; color:var(--ink-soft);}
+.likert-row{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-top:10px;}
+.likert-row .q{ font-size:13.5px; font-weight:600; margin-bottom:6px;}
+
+.submit-bar{
+  position:sticky; bottom:0; background:var(--paper-card); border-top:1px solid var(--line);
+  padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  border-radius:var(--radius); box-shadow:var(--shadow); flex-wrap:wrap;
+}
+.btn{ border:none; border-radius:8px; padding:12px 22px; font-size:14.5px; font-weight:600; cursor:pointer; }
+.btn-primary{ background:var(--cloth); color:#fff; }
+.btn-primary:hover{ background:var(--cloth-dark); }
+.btn-ghost{ background:transparent; border:1px solid var(--ink-soft); color:var(--ink-soft); }
+.btn-ghost:hover{ border-color:var(--ink); color:var(--ink); }
+.status-msg{ font-size:13px; color:var(--ink-soft); }
+.status-msg.ok{ color:var(--cloth); font-weight:600; }
+.status-msg.err{ color:var(--danger); font-weight:600; }
+
+.missing{ border-color:var(--danger) !important; box-shadow:0 0 0 3px rgba(155,59,52,0.12) !important; }
+
+.file-chip{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:13px;
+}
+.file-chip .name{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.file-chip .size{ color:var(--ink-soft); font-size:11.5px; flex-shrink:0; }
+.file-chip button{ background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px; line-height:1; flex-shrink:0; }
+.draft-status{ font-size:11.5px; color:var(--ink-soft); }
+
+@media print{
+  .ribbon, .submit-bar, .add-row-btn, .del-row{ display:none !important; }
+  .card{ box-shadow:none; break-inside:avoid; }
+  body{ background:#fff; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="hero">
+    <div class="eyebrow">학교자율과정 · 자율주제 대체 활동 · 고3</div>
+    <h1>진로 연계 독서 프로젝트</h1>
+    <p class="sub">책 한 권을 골라 &ldquo;줄거리 소개&rdquo;가 아니라, 핵심 개념·문제의식을 분석하고 나의 진로·관심 분야와 구체적으로 연결하는 활동입니다. 진로가 아직 정해지지 않았다면 관심 분야로 대신해도 좋습니다.</p>
+    <div class="note">이 학습지의 내용은 학교생활기록부 개인별 세부능력 및 특기사항(세특) 작성의 근거 자료로 활용됩니다. &ldquo;좋았다/재미있었다&rdquo;보다 &ldquo;무엇을 새롭게 보게 되었는가&rdquo;를 근거를 들어 구체적으로 써주세요.</div>
+    <div class="schedule">
+      <span>1차시 · 도서 선정·계획</span>
+      <span>2~5차시 · 핵심 내용 분석</span>
+      <span>6차시 · 진로 연계 분석</span>
+      <span>7차시 · 표현 산출물 기획</span>
+      <span>8차시 · 종합 성찰·제출</span>
+    </div>
+  </div>
+
+  <nav class="ribbon" id="ribbon">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0% 작성됨</div>
+    </div>
+  </nav>
+
+  <main>
+    <form id="readingForm">
+
+      <!-- Stage 0 -->
+      <section class="card" data-stage="0">
+        <div class="stage-eyebrow">Step 0</div>
+        <h2>기본 정보</h2>
+        <div class="row cols-3">
+          <div><label class="req">학년</label><input type="text" name="grade" inputmode="numeric" placeholder="예: 3"></div>
+          <div><label class="req">반</label><input type="text" name="class" inputmode="numeric" placeholder="예: 5"></div>
+          <div><label class="req">번호</label><input type="text" name="number" inputmode="numeric" placeholder="예: 12"></div>
+        </div>
+        <label class="req">이름</label>
+        <input type="text" name="studentName" placeholder="홍길동">
+        <label>희망 진로 또는 관심 분야</label>
+        <p class="hint">아직 정해지지 않았다면 평소 흥미 있는 분야를 적어도 좋습니다.</p>
+        <input type="text" name="desiredCareer" placeholder="예: 임상병리사, 데이터 사이언티스트, 아직 미정 등">
+      </section>
+
+      <!-- Stage 1: 도서 선정 및 읽기 계획 -->
+      <section class="card" data-stage="1">
+        <div class="stage-eyebrow">Step 1 · 1차시</div>
+        <h2>도서 선정 및 읽기 계획</h2>
+        <p class="stage-desc">이미 읽은 책도 가능합니다. 단, 나의 진로·관심 분야와 어떻게 연결되는지 설명할 수 있어야 합니다.</p>
+
+        <div class="row cols-2">
+          <div><label>선정 도서명</label><input type="text" name="bookTitle"></div>
+          <div><label>저자 / 출판사</label><input type="text" name="bookAuthorPublisher"></div>
+        </div>
+
+        <label>책의 분야</label>
+        <select name="bookField">
+          <option value="">선택하세요</option>
+          <option>과학</option><option>의학·보건</option><option>교육</option>
+          <option>경영·경제</option><option>공학·기술</option><option>사회문제</option>
+          <option>예술</option><option>심리</option><option>문학</option><option>기타</option>
+        </select>
+
+        <label>이 책을 고른 계기 (참고용, 해당하는 것 모두 선택)</label>
+        <div class="chip-group" data-chipgroup="reasonType">
+          <label class="chip"><input type="checkbox" value="진로 관련"><span>진로 관련</span></label>
+          <label class="chip"><input type="checkbox" value="평소 관심 분야"><span>평소 관심 분야</span></label>
+          <label class="chip"><input type="checkbox" value="추천받음"><span>추천받음</span></label>
+          <label class="chip"><input type="checkbox" value="우연히 발견"><span>우연히 발견</span></label>
+          <label class="chip"><input type="checkbox" value="기타"><span>기타</span></label>
+        </div>
+
+        <label>이 책을 선택한 이유</label>
+        <p class="hint">단순한 흥미보다, 나의 진로 또는 관심 분야와 어떻게 연결되는지 구체적으로 적어보세요.</p>
+        <textarea name="reasonDetail" rows="3"></textarea>
+
+        <label>책을 읽기 전, 내가 이미 알고 있던 내용</label>
+        <textarea name="priorKnowledge" rows="2"></textarea>
+
+        <label>책을 통해 확인하고 싶은 질문</label>
+        <textarea name="preCuriosity" rows="2"></textarea>
+      </section>
+
+      <!-- Stage 2: 핵심 내용 분석 -->
+      <section class="card" data-stage="2">
+        <div class="stage-eyebrow">Step 2 · 2~5차시</div>
+        <h2>책의 핵심 내용 분석</h2>
+        <p class="stage-desc">줄거리 요약이 아니라 &ldquo;핵심 개념, 문제의식, 주장, 근거&rdquo;가 드러나도록 정리합니다.</p>
+
+        <label>핵심 개념 / 키워드 (2개 이상 권장)</label>
+        <table class="grid-table" id="keywordTable">
+          <thead><tr><th>핵심 개념·키워드</th><th>책에서의 의미</th><th>진로와 연결될 가능성</th><th></th></tr></thead>
+          <tbody id="keywordTbody"></tbody>
+        </table>
+        <button type="button" class="add-row-btn" id="addKeywordRow">+ 키워드 추가</button>
+
+        <label>책이 제기하는 가장 중요한 문제의식 또는 질문</label>
+        <textarea name="coreProblem" rows="3"></textarea>
+
+        <label>저자가 이 문제에 대해 제시하는 주장이나 관점</label>
+        <textarea name="authorClaim" rows="3"></textarea>
+
+        <label>인상 깊은 문장 또는 장면 (쪽수, 이유 포함, 2개 이상 권장)</label>
+        <table class="grid-table" id="quoteTable">
+          <thead><tr><th>쪽수</th><th>문장/장면</th><th>인상 깊은 이유</th><th></th></tr></thead>
+          <tbody id="quoteTbody"></tbody>
+        </table>
+        <button type="button" class="add-row-btn" id="addQuoteRow">+ 구절 추가</button>
+      </section>
+
+      <!-- Stage 3: 진로 연계 분석 -->
+      <section class="card" data-stage="3">
+        <div class="stage-eyebrow">Step 3 · 6차시</div>
+        <h2>진로 연계 분석</h2>
+        <p class="stage-desc">책의 내용을 자신의 진로 분야와 연결하여 해석합니다. &ldquo;좋았다&rdquo;가 아니라 &ldquo;무엇을 새롭게 보게 되었는가&rdquo;를 중심으로 씁니다.</p>
+
+        <label>이 책의 내용은 나의 진로 또는 관심 분야와 어떻게 연결되는가?</label>
+        <textarea name="careerConnection" rows="4"></textarea>
+
+        <label>이 책을 통해 알게 된 진로 분야의 실제 문제, 쟁점, 필요성은 무엇인가?</label>
+        <textarea name="careerIssue" rows="3"></textarea>
+
+        <label>이 책이 알려준 진로 분야의 필요 역량은 무엇인가?</label>
+        <p class="hint">예: 전문 지식, 의사소통, 윤리의식, 창의성, 협업, 데이터 해석 등</p>
+        <textarea name="careerSkill" rows="3"></textarea>
+
+        <label>관점별로 정리하기 (2개 이상 권장)</label>
+        <table class="grid-table">
+          <thead><tr><th style="width:120px">관점</th><th>책과 관련된 내용</th><th>나의 생각</th></tr></thead>
+          <tbody>
+            <tr><td class="fixed-label">사회적 영향</td><td><textarea name="matrix_social_book" rows="2"></textarea></td><td><textarea name="matrix_social_think" rows="2"></textarea></td></tr>
+            <tr><td class="fixed-label">윤리적 쟁점</td><td><textarea name="matrix_ethics_book" rows="2"></textarea></td><td><textarea name="matrix_ethics_think" rows="2"></textarea></td></tr>
+            <tr><td class="fixed-label">미래 변화</td><td><textarea name="matrix_future_book" rows="2"></textarea></td><td><textarea name="matrix_future_think" rows="2"></textarea></td></tr>
+            <tr><td class="fixed-label">진로 준비 방향</td><td><textarea name="matrix_prep_book" rows="2"></textarea></td><td><textarea name="matrix_prep_think" rows="2"></textarea></td></tr>
+          </tbody>
+        </table>
+
+        <label>책을 읽고 새롭게 생긴 후속 탐구 질문</label>
+        <p class="hint">더 조사하고 싶은 주제, 실험·토론·조사로 확장할 수 있는 질문</p>
+        <textarea name="furtherQuestion" rows="3"></textarea>
+      </section>
+
+      <!-- Stage 4: 표현 산출물 기획 -->
+      <section class="card" data-stage="4">
+        <div class="stage-eyebrow">Step 4 · 7차시</div>
+        <h2>표현 산출물 기획</h2>
+        <p class="stage-desc">책을 읽지 않은 친구도 이 책의 가치와 나의 진로 연결성을 이해할 수 있도록 구성해봅니다.</p>
+
+        <label>산출물 유형 (하나 이상 선택)</label>
+        <div class="chip-group" data-chipgroup="outputType">
+          <label class="chip"><input type="checkbox" value="발표자료"><span>발표자료</span></label>
+          <label class="chip"><input type="checkbox" value="포스터"><span>포스터</span></label>
+          <label class="chip"><input type="checkbox" value="카드뉴스"><span>카드뉴스</span></label>
+          <label class="chip"><input type="checkbox" value="영상 대본"><span>영상 대본</span></label>
+          <label class="chip"><input type="checkbox" value="에세이/글"><span>에세이/글</span></label>
+          <label class="chip"><input type="checkbox" value="기타"><span>기타</span></label>
+        </div>
+
+        <label>핵심 메시지</label>
+        <p class="hint">이 책을 통해 꼭 전달하고 싶은 한 문장</p>
+        <input type="text" name="coreMessage">
+
+        <label>산출물 개요</label>
+        <p class="hint">도입(왜 이 책인가) → 전개(핵심 내용, 진로 연결, 근거) → 마무리(추천 이유, 나의 변화) 흐름으로 간단히 정리해보세요.</p>
+        <textarea name="outputOutline" rows="5"></textarea>
+
+        <label>산출물 파일 첨부 (선택)</label>
+        <p class="hint">포스터, 카드뉴스, 사진 등 최대 3개 · 각 5MB 이하 권장 · 이미지 또는 PDF</p>
+        <input type="file" id="fileInput" accept="image/*,.pdf" multiple>
+        <div id="fileList" style="margin-top:8px; display:flex; flex-direction:column; gap:6px;"></div>
+      </section>
+
+      <!-- Stage 5: 종합 성찰 -->
+      <section class="card" data-stage="5">
+        <div class="stage-eyebrow">Step 5 · 8차시</div>
+        <h2>종합 성찰 및 자기점검</h2>
+        <p class="stage-desc">세특 기록의 근거가 되는 부분입니다. 구체적인 책 내용, 진로 연결, 나의 변화가 드러나게 써주세요.</p>
+
+        <label>이 활동을 통해 나의 진로 인식은 어떻게 달라졌는가?</label>
+        <textarea name="careerAwarenessChange" rows="4"></textarea>
+
+        <label>책을 읽고 나에게 가장 필요하다고 느낀 역량이나 태도는?</label>
+        <textarea name="neededCompetency" rows="3"></textarea>
+
+        <label>앞으로 더 탐구하거나 실천하고 싶은 계획</label>
+        <textarea name="futurePlan" rows="3"></textarea>
+
+        <label>자기평가</label>
+        <div id="likertContainer"></div>
+      </section>
+
+    </form>
+  </main>
+</div>
+
+<div class="submit-bar">
+  <div>
+    <div class="status-msg" id="statusMsg">학년·반·번호·이름만 작성하면 제출할 수 있어요. 나머지는 최대한 채워보세요.</div>
+    <div class="draft-status" id="draftStatus">이 기기에 자동 저장됩니다.</div>
+  </div>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <button type="button" class="btn btn-ghost" id="clearDraftBtn">임시저장 지우기</button>
+    <button type="button" class="btn btn-ghost" id="downloadBtn">내 답변 파일로 저장</button>
+    <button type="button" class="btn btn-ghost" id="printBtn">인쇄 / PDF 저장</button>
+    <button type="button" class="btn btn-primary" id="submitBtn">제출하기</button>
+  </div>
+</div>
+
+<script>
+/* ================= 설정 =================
+   구글시트로 자동 수집하려면 아래 SCRIPT_URL에
+   배포한 Google Apps Script 웹앱 URL을 붙여넣으세요.
+   비워두면 "내 답변 파일로 저장" 버튼으로 다운로드해
+   선생님께 제출하는 방식으로도 사용할 수 있습니다.
+=========================================== */
+const SCRIPT_URL = ""; // 예: "https://script.google.com/macros/s/AKfycb.../exec"
+
+const stages = [
+  {i:0, label:'기본 정보'},
+  {i:1, label:'도서 선정'},
+  {i:2, label:'핵심 분석'},
+  {i:3, label:'진로 연계'},
+  {i:4, label:'산출물 기획'},
+  {i:5, label:'종합 성찰'},
+];
+
+const ribbon = document.getElementById('ribbon');
+stages.forEach(s=>{
+  const el = document.createElement('div');
+  el.className = 'ribbon-item';
+  el.dataset.stage = s.i;
+  el.innerHTML = `<span class="num">${s.i}</span><span class="label">${s.label}</span>`;
+  el.addEventListener('click', ()=>{
+    document.querySelector(`.card[data-stage="${s.i}"]`).scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  ribbon.appendChild(el);
+});
+
+// chip toggle behavior
+document.querySelectorAll('.chip').forEach(chip=>{
+  const input = chip.querySelector('input');
+  chip.addEventListener('click', ()=>{
+    input.checked = !input.checked;
+    chip.classList.toggle('checked', input.checked);
+    updateProgress();
+    refreshDone();
+  });
+});
+
+// dynamic table helper
+function makeRowAdder(tbodyId, rowHtmlFn){
+  const tbody = document.getElementById(tbodyId);
+  return function add(){
+    const tr = document.createElement('tr');
+    tr.innerHTML = rowHtmlFn();
+    tr.querySelector('.del-row').addEventListener('click', ()=>{ tr.remove(); updateProgress(); });
+    tbody.appendChild(tr);
+  };
+}
+const addQuoteRow = makeRowAdder('quoteTbody', ()=>`
+  <td><input type="text" name="quotePage[]" placeholder="p."></td>
+  <td><textarea name="quoteText[]" rows="2"></textarea></td>
+  <td><textarea name="quoteReason[]" rows="2"></textarea></td>
+  <td><button type="button" class="del-row" title="삭제">&times;</button>`);
+document.getElementById('addQuoteRow').addEventListener('click', addQuoteRow);
+addQuoteRow(); addQuoteRow();
+
+const addKeywordRow = makeRowAdder('keywordTbody', ()=>`
+  <td><input type="text" name="keywordText[]"></td>
+  <td><textarea name="keywordMeaning[]" rows="2"></textarea></td>
+  <td><textarea name="keywordCareer[]" rows="2"></textarea></td>
+  <td><button type="button" class="del-row" title="삭제">&times;</button>`);
+document.getElementById('addKeywordRow').addEventListener('click', addKeywordRow);
+addKeywordRow(); addKeywordRow();
+
+// ---------- file attachments ----------
+const MAX_FILES = 3;
+const MAX_FILE_MB = 5;
+let selectedFiles = [];
+const fileInput = document.getElementById('fileInput');
+const fileListEl = document.getElementById('fileList');
+
+function renderFileList(){
+  fileListEl.innerHTML = '';
+  selectedFiles.forEach((f, idx)=>{
+    const row = document.createElement('div');
+    row.className = 'file-chip';
+    row.innerHTML = `<span class="name">${f.name}</span><span class="size">${(f.size/1024/1024).toFixed(1)}MB</span><button type="button">&times;</button>`;
+    row.querySelector('button').addEventListener('click', ()=>{ selectedFiles.splice(idx,1); renderFileList(); });
+    fileListEl.appendChild(row);
+  });
+}
+fileInput.addEventListener('change', ()=>{
+  const incoming = Array.from(fileInput.files);
+  for(const f of incoming){
+    if(selectedFiles.length >= MAX_FILES){
+      statusMsgSafe(`파일은 최대 ${MAX_FILES}개까지 첨부할 수 있어요.`);
+      break;
+    }
+    if(f.size > MAX_FILE_MB * 1024 * 1024){
+      statusMsgSafe(`${f.name} 파일이 너무 커요 (${MAX_FILE_MB}MB 이하만 가능).`);
+      continue;
+    }
+    selectedFiles.push(f);
+  }
+  fileInput.value = '';
+  renderFileList();
+});
+function statusMsgSafe(msg){
+  const el = document.getElementById('statusMsg');
+  if(el){ el.textContent = msg; el.className = 'status-msg err'; }
+}
+function fileToBase64(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=> resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// likert self-assessment
+const likertQs = [
+  '책의 핵심 내용을 줄거리가 아닌 개념·문제의식 중심으로 정리했다',
+  '책과 나의 진로 또는 관심 분야의 연결을 구체적으로 설명했다',
+  '진로 분야의 필요 역량, 사회적 영향, 윤리적 쟁점 중 하나 이상을 깊이 생각했다',
+  '저자의 주장에 대해 근거를 들어 비판적으로 검토했다',
+  '후속 탐구 계획을 구체적으로 세웠다',
+];
+const likertContainer = document.getElementById('likertContainer');
+likertQs.forEach((q, qi)=>{
+  const wrap = document.createElement('div');
+  wrap.className = 'likert-row';
+  let opts = '';
+  for(let v=1; v<=5; v++){
+    opts += `<label class="likert-item"><input type="radio" name="likert${qi}" value="${v}">${v}</label>`;
+  }
+  wrap.innerHTML = `<div class="q">${qi+1}. ${q}</div><div class="likert">${opts}</div>`;
+  likertContainer.appendChild(wrap);
+});
+
+// progress tracking (based on label.req -> next input/textarea/select/.chip-group)
+const form = document.getElementById('readingForm');
+function nextFieldOf(lbl){
+  let el = lbl.nextElementSibling;
+  while(el){
+    if(el.matches('input,textarea,select,.chip-group')) return el;
+    if(el.matches('p')){ el = el.nextElementSibling; continue; }
+    return null; // hit a table, another label, a button, etc. — not a simple single-field label
+  }
+  return null;
+}
+function isFieldFilled(el){
+  if(!el) return false;
+  if(el.classList && el.classList.contains('chip-group')) return !!el.querySelector('input:checked');
+  return el.value && el.value.trim().length>0;
+}
+function updateProgress(){
+  const labels = form.querySelectorAll('label');
+  let total=0, filled=0;
+  labels.forEach(lbl=>{
+    const el = nextFieldOf(lbl);
+    if(!el) return; // labels like "자기평가" that precede a container, not a single field
+    total++;
+    if(isFieldFilled(el)) filled++;
+  });
+  const pct = total? Math.round((filled/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = pct+'% 작성됨';
+}
+form.addEventListener('input', updateProgress);
+updateProgress();
+
+// active ribbon highlight via scroll
+const cards = document.querySelectorAll('.card');
+const ribbonItems = document.querySelectorAll('.ribbon-item');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const stage = entry.target.dataset.stage;
+      ribbonItems.forEach(ri=> ri.classList.toggle('active', ri.dataset.stage === stage));
+    }
+  });
+}, {rootMargin:'-40% 0px -55% 0px'});
+cards.forEach(c=>observer.observe(c));
+
+function refreshDone(){
+  cards.forEach(card=>{
+    const stage = card.dataset.stage;
+    const hasValue = Array.from(card.querySelectorAll('input[type=text],textarea,select'))
+      .some(el=>el.value && el.value.trim().length>0)
+      || Array.from(card.querySelectorAll('.chip input')).some(c=>c.checked);
+    const item = document.querySelector(`.ribbon-item[data-stage="${stage}"]`);
+    if(item) item.classList.toggle('done', hasValue);
+  });
+}
+form.addEventListener('input', refreshDone);
+
+// ---------- collect data ----------
+function collectData(){
+  const data = {timestamp: new Date().toLocaleString('ko-KR')};
+  form.querySelectorAll('input[type=text], textarea, select').forEach(el=>{
+    if(!el.name) return;
+    if(el.name.endsWith('[]')){
+      const key = el.name.slice(0,-2);
+      data[key] = data[key] || [];
+      data[key].push(el.value);
+    } else {
+      data[el.name] = el.value;
+    }
+  });
+  document.querySelectorAll('.chip-group').forEach(group=>{
+    const key = group.dataset.chipgroup;
+    data[key] = Array.from(group.querySelectorAll('input:checked')).map(i=>i.value).join(', ');
+  });
+  likertQs.forEach((q,qi)=>{
+    const checked = form.querySelector(`input[name="likert${qi}"]:checked`);
+    data['자기평가_'+(qi+1)] = checked ? checked.value : '';
+  });
+  return data;
+}
+
+// ---------- autosave draft (localStorage) ----------
+const DRAFT_KEY = 'career_reading_project_draft_v1';
+let draftSaveEnabled = true;
+try{ localStorage.setItem('__test__','1'); localStorage.removeItem('__test__'); }
+catch(e){ draftSaveEnabled = false; }
+
+function snapshotForm(){
+  const snap = {simple:{}, arrays:{}, chips:{}, likert:{}};
+  form.querySelectorAll('input[type=text], textarea, select').forEach(el=>{
+    if(!el.name) return;
+    if(el.name.endsWith('[]')){
+      const key = el.name.slice(0,-2);
+      snap.arrays[key] = snap.arrays[key] || [];
+      snap.arrays[key].push(el.value);
+    } else {
+      snap.simple[el.name] = el.value;
+    }
+  });
+  document.querySelectorAll('.chip-group').forEach(group=>{
+    snap.chips[group.dataset.chipgroup] = Array.from(group.querySelectorAll('input:checked')).map(i=>i.value);
+  });
+  likertQs.forEach((q,qi)=>{
+    const checked = form.querySelector(`input[name="likert${qi}"]:checked`);
+    if(checked) snap.likert['likert'+qi] = checked.value;
+  });
+  return snap;
+}
+
+function applySnapshot(snap){
+  if(!snap) return;
+  Object.entries(snap.simple||{}).forEach(([name,val])=>{
+    const el = form.querySelector(`[name="${name}"]`);
+    if(el) el.value = val;
+  });
+  if(snap.arrays && snap.arrays.quoteText){
+    document.getElementById('quoteTbody').innerHTML = '';
+    for(let i=0;i<snap.arrays.quoteText.length;i++) addQuoteRow();
+    const pages = form.querySelectorAll('[name="quotePage[]"]');
+    const texts = form.querySelectorAll('[name="quoteText[]"]');
+    const reasons = form.querySelectorAll('[name="quoteReason[]"]');
+    (snap.arrays.quotePage||[]).forEach((v,i)=>{ if(pages[i]) pages[i].value=v; });
+    (snap.arrays.quoteText||[]).forEach((v,i)=>{ if(texts[i]) texts[i].value=v; });
+    (snap.arrays.quoteReason||[]).forEach((v,i)=>{ if(reasons[i]) reasons[i].value=v; });
+  }
+  if(snap.arrays && snap.arrays.keywordText){
+    document.getElementById('keywordTbody').innerHTML = '';
+    for(let i=0;i<snap.arrays.keywordText.length;i++) addKeywordRow();
+    const kt = form.querySelectorAll('[name="keywordText[]"]');
+    const km = form.querySelectorAll('[name="keywordMeaning[]"]');
+    const kc = form.querySelectorAll('[name="keywordCareer[]"]');
+    (snap.arrays.keywordText||[]).forEach((v,i)=>{ if(kt[i]) kt[i].value=v; });
+    (snap.arrays.keywordMeaning||[]).forEach((v,i)=>{ if(km[i]) km[i].value=v; });
+    (snap.arrays.keywordCareer||[]).forEach((v,i)=>{ if(kc[i]) kc[i].value=v; });
+  }
+  Object.entries(snap.chips||{}).forEach(([key, vals])=>{
+    const group = document.querySelector(`.chip-group[data-chipgroup="${key}"]`);
+    if(!group) return;
+    group.querySelectorAll('input').forEach(inp=>{
+      const should = vals.includes(inp.value);
+      inp.checked = should;
+      inp.closest('.chip').classList.toggle('checked', should);
+    });
+  });
+  Object.entries(snap.likert||{}).forEach(([name,val])=>{
+    const inp = form.querySelector(`input[name="${name}"][value="${val}"]`);
+    if(inp) inp.checked = true;
+  });
+}
+
+let saveTimer = null;
+function saveDraft(){
+  if(!draftSaveEnabled) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(snapshotForm()));
+      const ds = document.getElementById('draftStatus');
+      if(ds) ds.textContent = '이 기기에 자동 저장됨 · ' + new Date().toLocaleTimeString('ko-KR');
+    }catch(e){
+      const ds = document.getElementById('draftStatus');
+      if(ds) ds.textContent = '자동 저장 실패 (저장 공간 부족)';
+    }
+  }, 500);
+}
+function restoreDraft(){
+  if(!draftSaveEnabled) return;
+  let raw;
+  try{ raw = localStorage.getItem(DRAFT_KEY); }catch(e){ return; }
+  if(!raw) return;
+  try{
+    applySnapshot(JSON.parse(raw));
+    document.getElementById('draftStatus').textContent = '이전에 저장된 답변을 불러왔어요.';
+    updateProgress(); refreshDone();
+  }catch(e){ /* ignore corrupt draft */ }
+}
+function clearDraft(){
+  try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+  const ds = document.getElementById('draftStatus');
+  if(ds) ds.textContent = draftSaveEnabled ? '이 기기에 자동 저장됩니다.' : '이 브라우저에서는 자동 저장을 사용할 수 없어요.';
+}
+
+if(!draftSaveEnabled){
+  document.getElementById('draftStatus').textContent = '이 브라우저에서는 자동 저장을 사용할 수 없어요.';
+}
+form.addEventListener('input', saveDraft);
+form.addEventListener('change', saveDraft);
+document.querySelectorAll('.chip').forEach(chip=> chip.addEventListener('click', saveDraft));
+document.getElementById('clearDraftBtn').addEventListener('click', ()=>{
+  if(confirm('저장된 답변을 지우고 새로 시작할까요? 이 동작은 되돌릴 수 없어요.')){
+    form.reset();
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('checked'));
+    document.getElementById('quoteTbody').innerHTML=''; addQuoteRow(); addQuoteRow();
+    document.getElementById('keywordTbody').innerHTML=''; addKeywordRow(); addKeywordRow();
+    selectedFiles = []; renderFileList();
+    clearDraft();
+    updateProgress(); refreshDone();
+  }
+});
+restoreDraft();
+
+function findMissing(){
+  const missing = [];
+  form.querySelectorAll('label.req').forEach(lbl=>{
+    const el = nextFieldOf(lbl);
+    if(el && !isFieldFilled(el)) missing.push(el);
+  });
+  return missing;
+}
+
+const statusMsg = document.getElementById('statusMsg');
+
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const data = collectData();
+  let text = `진로 연계 독서 프로젝트 활동지\n제출시각: ${data.timestamp}\n\n`;
+  Object.entries(data).forEach(([k,v])=>{
+    if(k==='timestamp') return;
+    text += `[${k}]\n${Array.isArray(v)? v.join(' / ') : v}\n\n`;
+  });
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const nameForFile = (form.studentName.value || '학생').replace(/\s/g,'');
+  a.download = `진로독서_${nameForFile}.txt`;
+  a.click();
+});
+
+document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const missing = findMissing();
+  if(missing.length>0){
+    missing.forEach(el=>el.classList.add('missing'));
+    missing[0].scrollIntoView({behavior:'smooth', block:'center'});
+    statusMsg.textContent = `아직 작성하지 않은 필수 항목이 ${missing.length}개 있어요.`;
+    statusMsg.className = 'status-msg err';
+    return;
+  }
+  const data = collectData();
+
+  if(!SCRIPT_URL){
+    if(selectedFiles.length>0){
+      statusMsg.textContent = '첨부파일은 자동 제출 주소가 설정된 경우에만 전송돼요. "내 답변 파일로 저장"으로 텍스트만 백업해주세요.';
+    } else {
+      statusMsg.textContent = '자동 제출 주소가 설정되지 않았어요. "내 답변 파일로 저장" 후 선생님께 전달해주세요.';
+    }
+    statusMsg.className = 'status-msg err';
+    return;
+  }
+
+  statusMsg.textContent = selectedFiles.length>0 ? '파일 변환 및 제출 중...' : '제출 중...';
+  statusMsg.className = 'status-msg';
+  try{
+    if(selectedFiles.length>0){
+      data.files = await Promise.all(selectedFiles.map(async f=>({
+        name:f.name, mimeType:f.type||'application/octet-stream', base64: await fileToBase64(f)
+      })));
+    }
+    await fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(data),
+    });
+    statusMsg.textContent = '제출되었습니다. 감사합니다! (답변은 이 기기에도 계속 저장되어 있어요)';
+    statusMsg.className = 'status-msg ok';
+  }catch(err){
+    statusMsg.textContent = '제출 중 오류가 발생했어요. "내 답변 파일로 저장" 후 선생님께 전달해주세요.';
+    statusMsg.className = 'status-msg err';
+  }
+});
+
+form.addEventListener('input', (e)=>{ e.target.classList && e.target.classList.remove('missing'); });
+</script>
+</body>
+</html>
