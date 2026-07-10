@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 반 공동체 역량 설문</title>
+<style>
+  :root {
+    --main: #2f6fed;
+    --main-dark: #1f4fbf;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --text: #222831;
+    --sub: #6b7280;
+    --border: #e2e5ec;
+    --accent: #eef3ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 24px 16px; }
+  header.top {
+    background: linear-gradient(135deg, var(--main), #6f9bff);
+    color: #fff;
+    padding: 36px 20px 28px;
+    border-radius: 0 0 24px 24px;
+    margin-bottom: 20px;
+  }
+  header.top h1 { margin: 0 0 8px; font-size: 22px; }
+  header.top p { margin: 0; font-size: 14px; opacity: 0.92; }
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--main-dark);
+    margin: 0 0 4px;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--sub);
+    margin: 0 0 16px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--main-dark);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .q { margin-bottom: 18px; }
+  .q:last-child { margin-bottom: 0; }
+  label.qlabel {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  label.qlabel .req { color: #e5484d; margin-left: 2px; }
+  label.qhint {
+    display: block;
+    font-size: 12.5px;
+    color: var(--sub);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  input[type="text"], input[type="number"], textarea, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-family: inherit;
+    background: #fbfbfd;
+    color: var(--text);
+  }
+  textarea { min-height: 70px; resize: vertical; }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--main);
+    background: #fff;
+  }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .checkbox-grid { display: flex; flex-direction: column; gap: 8px; }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fbfbfd;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .checkbox-item input { margin-top: 2px; width: 16px; height: 16px; flex-shrink: 0; }
+  .checkbox-item.checked { border-color: var(--main); background: var(--accent); }
+  .example-box {
+    background: #fff8e6;
+    border: 1px dashed #e8c468;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #7a5c00;
+    margin-bottom: 10px;
+  }
+  button#submitBtn {
+    width: 100%;
+    padding: 14px;
+    background: var(--main);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  button#submitBtn:disabled { background: #9db4e8; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-secondary {
+    flex: 1;
+    padding: 12px;
+    background: #fff;
+    color: var(--main-dark);
+    border: 1px solid var(--main);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-secondary.ghost {
+    color: var(--sub);
+    border-color: var(--border);
+  }
+  .save-status {
+    text-align: center;
+    font-size: 12px;
+    color: var(--sub);
+    margin: 8px 0 0;
+  }
+  .save-status.saved { color: #1a9c5c; }
+  .draft-banner {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #eaf7ee;
+    border: 1px solid #b9e6c6;
+    color: #17683f;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .draft-banner button {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: #17683f;
+    text-decoration: underline;
+    font-size: 12.5px;
+    cursor: pointer;
+    padding: 0;
+  }
+  #errorMsg {
+    display: none;
+    background: #fdecec;
+    color: #c0262d;
+    border: 1px solid #f3b4b4;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .done-screen {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .done-screen .emoji { font-size: 48px; margin-bottom: 12px; }
+  .done-screen h2 { margin: 0 0 8px; font-size: 20px; }
+  .done-screen p { color: var(--sub); font-size: 14px; }
+  footer.note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--sub);
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>🌱 우리 반 공동체 역량 설문</h1>
+    <p>1년 동안 자율활동 속에서 내가 보여준 모습을 스스로 돌아보고 기록해보세요.<br>선생님이 여러분의 생활기록부(자율활동 세특)를 작성하는 데 소중한 자료가 됩니다.</p>
+  </header>
+
+  <div id="formArea">
+    <div class="draft-banner" id="draftBanner">
+      <span id="draftBannerText">이전에 작성하던 내용을 불러왔어요.</span>
+      <button type="button" id="clearDraftBtn">지우고 새로 작성</button>
+    </div>
+    <div id="errorMsg"></div>
+
+    <form id="surveyForm">
+
+      <!-- 기본 정보 -->
+      <div class="card">
+        <p class="section-title">📋 기본 정보</p>
+        <p class="section-desc">본인 확인을 위한 정보예요.</p>
+        <div class="row3">
+          <div class="q">
+            <label class="qlabel">학년<span class="req">*</span></label>
+            <input type="text" name="grade" required inputmode="numeric" placeholder="예: 2">
+          </div>
+          <div class="q">
+            <label class="qlabel">반<span class="req">*</span></label>
+            <input type="text" name="classNum" required inputmode="numeric" placeholder="예: 2">
+          </div>
+          <div class="q">
+            <label class="qlabel">번호<span class="req">*</span></label>
+            <input type="text" name="number" required inputmode="numeric" placeholder="예: 15">
+          </div>
+        </div>
+        <div class="q">
+          <label class="qlabel">이름<span class="req">*</span></label>
+          <input type="text" name="name" required placeholder="이름을 입력하세요">
+        </div>
+      </div>
+
+      <!-- I. 워밍업 -->
+      <div class="card">
+        <p class="section-title"><span class="badge">Ⅰ</span> 나만의 역할 이름 짓기</p>
+        <p class="section-desc">1년간 우리 반에서 내가 한 역할을 앱·직업·캐릭터 이름처럼 만들어본다면?</p>
+        <div class="example-box">
+          예시: 학교 알리미 앱 &ldquo;이알리미&rdquo;처럼&nbsp;&rarr;&nbsp;우리 반이 2반이라 &ldquo;2알리미&rdquo; (반 소식을 가장 빨리 전달하는 역할)
+        </div>
+        <div class="q">
+          <label class="qlabel">나의 역할 이름<span class="req">*</span></label>
+          <input type="text" name="roleName" required placeholder="예: 2알리미, 2해결사, 2분위기메이커...">
+        </div>
+        <div class="q">
+          <label class="qlabel">그 이름을 지은 이유<span class="req">*</span></label>
+          <label class="qhint">어떤 역할을 했길래 이런 이름을 붙였는지 설명해주세요.</label>
+          <textarea name="roleReason" required placeholder="예: 학급 공지사항이나 준비물을 항상 가장 먼저 확인해서 단체 채팅방에 올려줬기 때문에..."></textarea>
+        </div>
+      </div>
+
+      <!-- II. 활동 목록 -->
+      <div class="card">
+        <p class="section-title"><span class="badge">Ⅱ</span> 올해 참여한 활동</p>
+        <p class="section-desc">해당하는 것을 모두 선택하세요.</p>
+        <div class="q">
+          <label class="qlabel">참여한 자율활동<span class="req">*</span></label>
+          <div class="checkbox-grid" id="activityGroup">
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="학급 임원(회장/부회장 등)">학급 임원(회장·부회장 등)</label>
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="1인 1역">1인 1역(청소·환기·정리 등 담당 역할)</label>
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="행사·캠페인 기획운영">행사·캠페인 기획·운영</label>
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="멘토링(멘토/멘티)">멘토링(멘토 또는 멘티)</label>
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="모둠팀 프로젝트">모둠·팀 프로젝트</label>
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="건의제안 활동">건의·제안 활동</label>
+            <label class="checkbox-item"><input type="checkbox" name="activities" value="봉사활동">봉사활동</label>
+          </div>
+        </div>
+        <div class="q">
+          <label class="qlabel">기타 활동 (선택)</label>
+          <input type="text" name="activitiesOther" placeholder="목록에 없는 활동이 있다면 적어주세요">
+        </div>
+        <div class="q">
+          <label class="qlabel">그중 가장 책임감 있게, 또는 가장 주도적으로 참여한 활동<span class="req">*</span></label>
+          <textarea name="mainActivity" required placeholder="활동 이름과 함께 무엇을 했는지 간단히 적어주세요"></textarea>
+        </div>
+      </div>
+
+      <!-- III. 협력적 소통 -->
+      <div class="card">
+        <p class="section-title"><span class="badge">Ⅲ</span> 협력적 소통</p>
+        <p class="section-desc">의견 조율, 리더십, 협업 경험을 구체적으로 적어주세요.</p>
+        <div class="q">
+          <label class="qlabel">모둠·학급 활동에서 의견이 갈렸을 때, 조율하거나 설득했던 경험</label>
+          <label class="qhint">어떤 상황이었고, 내가 무엇을 했고, 결과가 어땠는지</label>
+          <textarea name="coordinationExp" placeholder="상황 → 나의 행동 → 결과 순으로 적어보세요"></textarea>
+        </div>
+        <div class="q">
+          <label class="qlabel">학급이나 친구들의 불편함·문제를 먼저 발견하고 해결을 제안하거나 실행한 경험</label>
+          <textarea name="problemSolvingExp" placeholder="예: OO 문제를 발견해서 △△을 제안/실행했다"></textarea>
+        </div>
+        <div class="q">
+          <label class="qlabel">임원, 팀장, 멘토 등 누군가를 이끄는 역할을 맡았던 구체적 사례</label>
+          <textarea name="leadershipExp" placeholder="맡았던 역할과 함께 이끌었던 과정을 적어주세요"></textarea>
+        </div>
+      </div>
+
+      <!-- IV. 성실성 -->
+      <div class="card">
+        <p class="section-title"><span class="badge">Ⅳ</span> 성실성</p>
+        <p class="section-desc">꾸준함과 책임감이 드러나는 경험을 적어주세요.</p>
+        <div class="q">
+          <label class="qlabel">1년간 꾸준히 맡아서 책임진 역할·업무는 무엇이고, 어떻게 수행했나요?</label>
+          <textarea name="consistentRole" placeholder="예: 1인 1역으로 매일 환기 담당, 어떻게 챙겼는지"></textarea>
+        </div>
+        <div class="q">
+          <label class="qlabel">힘들었지만 끝까지 책임을 다했던 경험</label>
+          <textarea name="perseveranceExp" placeholder="어떤 어려움이 있었고 어떻게 끝까지 해냈는지"></textarea>
+        </div>
+      </div>
+
+      <!-- V. 인성 배려 -->
+      <div class="card">
+        <p class="section-title"><span class="badge">Ⅴ</span> 인성 · 배려</p>
+        <p class="section-desc">공동체를 위한 배려와 실천을 적어주세요.</p>
+        <div class="q">
+          <label class="qlabel">어려움을 겪거나 소외된 친구를 도왔던 경험</label>
+          <textarea name="careExp" placeholder="어떤 친구를 어떻게 도왔는지 구체적으로"></textarea>
+        </div>
+        <div class="q">
+          <label class="qlabel">우리 반 분위기를 위해 스스로 실천한 것</label>
+          <textarea name="classCultureExp" placeholder="예: 매일 아침 인사하기, 다투는 친구들 중재하기 등"></textarea>
+        </div>
+      </div>
+
+      <!-- VI. 종합 -->
+      <div class="card">
+        <p class="section-title"><span class="badge">Ⅵ</span> 종합 정리</p>
+        <div class="q">
+          <label class="qlabel">이 활동들을 통해 배우거나 성장한 점<span class="req">*</span></label>
+          <textarea name="growth" required placeholder="한두 문장으로 정리해주세요"></textarea>
+        </div>
+        <div class="q">
+          <label class="qlabel">선생님이 꼭 알아줬으면 하는 나의 기여 (자유 서술)</label>
+          <textarea name="freeMessage" placeholder="위 항목에 못 담은 이야기가 있다면 자유롭게 적어주세요"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn">제출하기</button>
+      <div class="btn-row">
+        <button type="button" class="btn-secondary" id="saveDraftBtn">💾 임시저장</button>
+        <button type="button" class="btn-secondary ghost" id="resetFormBtn">작성 내용 지우기</button>
+      </div>
+      <p class="save-status" id="saveStatus">입력 중 자동으로 임시저장돼요.</p>
+    </form>
+  </div>
+
+  <div id="doneScreen" class="done-screen" style="display:none;">
+    <div class="emoji">✅</div>
+    <h2>제출이 완료되었어요!</h2>
+    <p>소중한 이야기를 들려줘서 고마워요.<br>선생님이 잘 확인할게요.</p>
+  </div>
+
+  <footer class="note">© 우리 반 자율활동 세특 자료 수집 설문</footer>
+</div>
+
+<script>
+  // ⚠️ 배포한 구글 앱스 스크립트 웹 앱 URL을 아래에 붙여넣으세요.
+  const SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+  const form = document.getElementById("surveyForm");
+  const errorMsg = document.getElementById("errorMsg");
+  const submitBtn = document.getElementById("submitBtn");
+  const saveStatus = document.getElementById("saveStatus");
+  const draftBanner = document.getElementById("draftBanner");
+  const draftBannerText = document.getElementById("draftBannerText");
+
+  const DRAFT_KEY = "communitySurvey_draft_v1";
+  const TEXT_FIELDS = [
+    "grade", "classNum", "number", "name", "roleName", "roleReason",
+    "activitiesOther", "mainActivity", "coordinationExp", "problemSolvingExp",
+    "leadershipExp", "consistentRole", "perseveranceExp", "careExp",
+    "classCultureExp", "growth", "freeMessage"
+  ];
+
+  // 체크박스 선택 시 카드 스타일 토글
+  document.querySelectorAll('#activityGroup .checkbox-item input').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      cb.closest('.checkbox-item').classList.toggle('checked', cb.checked);
+      autoSaveDraft();
+    });
+  });
+
+  // ---------- 임시저장(로컬 저장) 기능 ----------
+  function debounce(fn, delay) {
+    let t;
+    return function () {
+      clearTimeout(t);
+      t = setTimeout(fn, delay);
+    };
+  }
+
+  function collectDraftData() {
+    const data = {};
+    TEXT_FIELDS.forEach(function (key) {
+      const el = form.elements[key];
+      if (el) data[key] = el.value;
+    });
+    data.activities = Array.from(
+      document.querySelectorAll('#activityGroup input[name="activities"]:checked')
+    ).map(function (el) { return el.value; });
+    return data;
+  }
+
+  function saveDraft(showMessage) {
+    const payload = { data: collectDraftData(), savedAt: Date.now() };
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+      if (showMessage) {
+        saveStatus.textContent = "✅ 임시저장 완료 (" + formatTime(payload.savedAt) + ")";
+        saveStatus.classList.add("saved");
+      }
+    } catch (err) {
+      saveStatus.textContent = "임시저장에 실패했어요. (기기 저장공간을 확인해주세요)";
+      saveStatus.classList.remove("saved");
+    }
+  }
+
+  const autoSaveDraft = debounce(function () { saveDraft(true); }, 600);
+
+  function formatTime(ts) {
+    const d = new Date(ts);
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
+    return hh + ":" + mm;
+  }
+
+  function restoreDraft() {
+    let raw;
+    try {
+      raw = localStorage.getItem(DRAFT_KEY);
+    } catch (err) {
+      return;
+    }
+    if (!raw) return;
+
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch (err) {
+      return;
+    }
+    if (!payload || !payload.data) return;
+
+    const data = payload.data;
+    TEXT_FIELDS.forEach(function (key) {
+      const el = form.elements[key];
+      if (el && data[key]) el.value = data[key];
+    });
+
+    (data.activities || []).forEach(function (val) {
+      const cb = document.querySelector('#activityGroup input[name="activities"][value="' + CSS.escape(val) + '"]');
+      if (cb) {
+        cb.checked = true;
+        cb.closest('.checkbox-item').classList.add('checked');
+      }
+    });
+
+    draftBanner.style.display = "flex";
+    draftBannerText.textContent = "이전에 작성하던 내용을 불러왔어요. (저장 시각 " + formatTime(payload.savedAt) + ")";
+    saveStatus.textContent = "불러온 임시저장본을 이어서 작성 중이에요.";
+    saveStatus.classList.add("saved");
+  }
+
+  function clearDraft() {
+    try { localStorage.removeItem(DRAFT_KEY); } catch (err) { /* ignore */ }
+  }
+
+  // 입력할 때마다 자동 임시저장 (디바운스)
+  form.addEventListener("input", autoSaveDraft);
+
+  // 수동 임시저장 버튼
+  document.getElementById("saveDraftBtn").addEventListener("click", function () {
+    saveDraft(true);
+  });
+
+  // 배너의 "지우고 새로 작성" 버튼
+  document.getElementById("clearDraftBtn").addEventListener("click", function () {
+    if (!confirm("임시저장된 내용을 지우고 새로 작성할까요?")) return;
+    clearDraft();
+    form.reset();
+    document.querySelectorAll('#activityGroup .checkbox-item').forEach(function (item) {
+      item.classList.remove('checked');
+    });
+    draftBanner.style.display = "none";
+    saveStatus.textContent = "입력 중 자동으로 임시저장돼요.";
+    saveStatus.classList.remove("saved");
+  });
+
+  // "작성 내용 지우기" 버튼 (하단)
+  document.getElementById("resetFormBtn").addEventListener("click", function () {
+    if (!confirm("작성한 내용을 모두 지울까요? 임시저장본도 함께 삭제됩니다.")) return;
+    clearDraft();
+    form.reset();
+    document.querySelectorAll('#activityGroup .checkbox-item').forEach(function (item) {
+      item.classList.remove('checked');
+    });
+    draftBanner.style.display = "none";
+    saveStatus.textContent = "입력 중 자동으로 임시저장돼요.";
+    saveStatus.classList.remove("saved");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // 페이지 로드 시 임시저장본 복원
+  restoreDraft();
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    errorMsg.style.display = "none";
+
+    if (SCRIPT_URL.indexOf("YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") !== -1) {
+      errorMsg.textContent = "아직 구글 앱스 스크립트 URL이 연결되지 않았습니다. survey.html의 SCRIPT_URL을 설정해주세요.";
+      errorMsg.style.display = "block";
+      return;
+    }
+
+    const activities = Array.from(
+      document.querySelectorAll('#activityGroup input[name="activities"]:checked')
+    ).map(function (el) { return el.value; });
+
+    if (activities.length === 0) {
+      errorMsg.textContent = "참여한 자율활동을 최소 1개 이상 선택해주세요.";
+      errorMsg.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const fd = new FormData(form);
+    const data = {
+      grade: fd.get("grade") || "",
+      classNum: fd.get("classNum") || "",
+      number: fd.get("number") || "",
+      name: fd.get("name") || "",
+      roleName: fd.get("roleName") || "",
+      roleReason: fd.get("roleReason") || "",
+      activities: activities.join(", "),
+      activitiesOther: fd.get("activitiesOther") || "",
+      mainActivity: fd.get("mainActivity") || "",
+      coordinationExp: fd.get("coordinationExp") || "",
+      problemSolvingExp: fd.get("problemSolvingExp") || "",
+      leadershipExp: fd.get("leadershipExp") || "",
+      consistentRole: fd.get("consistentRole") || "",
+      perseveranceExp: fd.get("perseveranceExp") || "",
+      careExp: fd.get("careExp") || "",
+      classCultureExp: fd.get("classCultureExp") || "",
+      growth: fd.get("growth") || "",
+      freeMessage: fd.get("freeMessage") || ""
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "제출 중...";
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors", // Apps Script 웹앱은 CORS 헤더를 주지 않으므로 no-cors로 전송
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // preflight 방지
+      body: JSON.stringify(data)
+    })
+      .then(function () {
+        clearDraft();
+        document.getElementById("formArea").style.display = "none";
+        document.getElementById("doneScreen").style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      })
+      .catch(function (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "제출하기";
+        errorMsg.textContent = "제출 중 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도해주세요.";
+        errorMsg.style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        console.error(err);
+      });
+  });
+</script>
+
+</body>
+</html>
