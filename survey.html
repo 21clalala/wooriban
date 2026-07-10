@@ -254,13 +254,13 @@
           예시: 학교 알리미 앱 &ldquo;이알리미&rdquo;처럼&nbsp;&rarr;&nbsp;우리 반이 2반이라 &ldquo;2알리미&rdquo; (반 소식을 가장 빨리 전달하는 역할)
         </div>
         <div class="q">
-          <label class="qlabel">나의 역할 이름<span class="req">*</span></label>
-          <input type="text" name="roleName" required placeholder="예: 2알리미, 2해결사, 2분위기메이커...">
+          <label class="qlabel">나의 역할 이름</label>
+          <input type="text" name="roleName" placeholder="예: 2알리미, 2해결사, 2분위기메이커...">
         </div>
         <div class="q">
-          <label class="qlabel">그 이름을 지은 이유<span class="req">*</span></label>
+          <label class="qlabel">그 이름을 지은 이유</label>
           <label class="qhint">어떤 역할을 했길래 이런 이름을 붙였는지 설명해주세요.</label>
-          <textarea name="roleReason" required placeholder="예: 학급 공지사항이나 준비물을 항상 가장 먼저 확인해서 단체 채팅방에 올려줬기 때문에..."></textarea>
+          <textarea name="roleReason" placeholder="예: 학급 공지사항이나 준비물을 항상 가장 먼저 확인해서 단체 채팅방에 올려줬기 때문에..."></textarea>
         </div>
       </div>
 
@@ -269,7 +269,7 @@
         <p class="section-title"><span class="badge">Ⅱ</span> 올해 참여한 활동</p>
         <p class="section-desc">해당하는 것을 모두 선택하세요.</p>
         <div class="q">
-          <label class="qlabel">참여한 자율활동<span class="req">*</span></label>
+          <label class="qlabel">참여한 자율활동</label>
           <div class="checkbox-grid" id="activityGroup">
             <label class="checkbox-item"><input type="checkbox" name="activities" value="학급 임원(회장/부회장 등)">학급 임원(회장·부회장 등)</label>
             <label class="checkbox-item"><input type="checkbox" name="activities" value="1인 1역">1인 1역(청소·환기·정리 등 담당 역할)</label>
@@ -285,8 +285,8 @@
           <input type="text" name="activitiesOther" placeholder="목록에 없는 활동이 있다면 적어주세요">
         </div>
         <div class="q">
-          <label class="qlabel">그중 가장 책임감 있게, 또는 가장 주도적으로 참여한 활동<span class="req">*</span></label>
-          <textarea name="mainActivity" required placeholder="활동 이름과 함께 무엇을 했는지 간단히 적어주세요"></textarea>
+          <label class="qlabel">그중 가장 책임감 있게, 또는 가장 주도적으로 참여한 활동</label>
+          <textarea name="mainActivity" placeholder="활동 이름과 함께 무엇을 했는지 간단히 적어주세요"></textarea>
         </div>
       </div>
 
@@ -341,8 +341,8 @@
       <div class="card">
         <p class="section-title"><span class="badge">Ⅵ</span> 종합 정리</p>
         <div class="q">
-          <label class="qlabel">이 활동들을 통해 배우거나 성장한 점<span class="req">*</span></label>
-          <textarea name="growth" required placeholder="한두 문장으로 정리해주세요"></textarea>
+          <label class="qlabel">이 활동들을 통해 배우거나 성장한 점</label>
+          <textarea name="growth" placeholder="한두 문장으로 정리해주세요"></textarea>
         </div>
         <div class="q">
           <label class="qlabel">선생님이 꼭 알아줬으면 하는 나의 기여 (자유 서술)</label>
@@ -531,13 +531,6 @@
     const activities = Array.from(
       document.querySelectorAll('#activityGroup input[name="activities"]:checked')
     ).map(function (el) { return el.value; });
-
-    if (activities.length === 0) {
-      errorMsg.textContent = "참여한 자율활동을 최소 1개 이상 선택해주세요.";
-      errorMsg.style.display = "block";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
 
     const fd = new FormData(form);
     const data = {
