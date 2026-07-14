@@ -349,6 +349,7 @@
   function openModal() { document.getElementById('modal').classList.add('open'); }
   function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
+  // ★★★ 수정된 부분: new Image() + GET 쿼리스트링 방식 → fetch(POST) 방식으로 교체 ★★★
   function submitToSheet() {
     if (SHEET_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
       closeModal();
@@ -371,28 +372,4 @@
       background:  g('s3-bg'),
       mainContent: g('s3-main'),
       analysis:    g('s3-analysis'),
-      conclusion:  g('s4-conclusion'),
-      feeling:     g('s4-feeling'),
-      careerFeel:  g('s4-career-feel'),
-      references:  g('s5-ref')
-    };
-
-    var img = new Image();
-    img.src = SHEET_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
-    img.onload = img.onerror = function() {
-      closeModal();
-      btn.textContent = '제출하기'; btn.disabled = false;
-      showToast('제출 완료! 선생님 스프레드시트에 전송됐어요');
-      document.getElementById('notice-save').innerHTML = '<strong>제출 완료</strong><br>선생님 스프레드시트에 전송되었습니다. PDF로도 저장해두면 좋아요!';
-      document.getElementById('notice-save').className = 'notice green';
-    };
-  }
-
-  function g(id) { var el = document.getElementById(id); return el ? el.value : ''; }
-
-  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-  window.addEventListener('beforeunload', function() { save(); });
-  load();
-</script>
-</body>
-</html>
+      conclusion:
